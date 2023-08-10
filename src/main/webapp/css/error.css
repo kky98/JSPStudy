@@ -1,0 +1,17 @@
+@charset "UTF-8";
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	background-color: #f4f4f4;
+	color: #333;
+}
+.container {
+	max-width: 600px; margin:100px auto;
+	padding: 20px; background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+h1 { font-size: 5em; color:#ff6b6b}
+p {font-size: 1.5em;}
+a {color:#3498db; text-decoration: none;}
+a:hover{ text-decoration: underline;}

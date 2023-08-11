@@ -16,25 +16,19 @@
 			userId =(String)session.getAttribute("userId");
 		}
 %>
-<% if(userId != null){ %>
 <script>
-	window.onload= function(){
-		let time = <%= session.getMaxInactiveInterval()%> ;
-		document.getElementById("sessionTime").style.display="inline";
-		function fn_update(){
-			document.getElementById("sessionTime").innerText= "세션의 유효시간 : "+ time+"초";
-			if(time <= 0){
-				clearInterval(interval);
-				alert("세션 유효 시간이 만료되었습니다.");
-				location.href="main.jsp";
-			}
-			time--;
+	let time = <%= session.getMaxInactiveInterval() %> ;
+	function fn_update(){
+		document.getElementById("sessionTime").innerText= time+"초";
+		if(time <= 0){
+			clearInterval(interval);
+			alert("세션 유효 시간이 만료되었습니다.");
+			location.href="main.jsp";
 		}
-		let interval = setInterval(fn_update, 1000);
-		fn_update();
+		time--;
 	}
+	let interval = setInterval(fn_update, 1000);
 </script>
-<% } %>
 <body>
    <nav class="navbar navbar-expand-lg bg-body-tertiary">
    	   <div class="container-fluid">
@@ -78,12 +72,9 @@
    	   					<a class="nav-link dropdown-toggle" href="#"
    	   					 role="button" data-bs-toggle="dropdown" 
    	   					 aria-expanded="false">
-<%--    	   					<%=userId %>  --%>
-   	   					${userId}  님
+   	   					<%=userId %> 님
    	   					</a>
    	   					<ul class="dropdown-menu">
-   	   						<li><a class="dropdown-item" href="mypage.jsp"
-   	   						>마이페이지</a></li>
    	   						<li><a class="dropdown-item" href="logoutAction.jsp"
    	   						>로그아웃</a></li>
    	   					</ul>
@@ -101,7 +92,10 @@
    				main 입니다.
    			</div>
    			<div class="col-lg-4">
-   				<span id="sessionTime" style="display:none"></span>
+   				세션의 유효시간 : <span id="sessionTime"></span>
+   				<script>
+   					fn_update();
+   				</script>
    			</div>
    		</div>
    </div>

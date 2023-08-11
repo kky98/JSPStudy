@@ -37,19 +37,7 @@ public class UserService {
 		}
 		return null;
 	}
-	// 회원정보 조회	
-	public UserVO userInfo(String id) {
-		Connection conn = cp.getConnection();
-		try {
-			UserVO vo = dao.loginUser(conn, id);
-			return vo;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if(conn != null )cp.releaseConnection(conn);
-		}
-		return null;
-	}
+	
 	// 회원가입(INSERT)
 	public int insertUser(UserVO user) {
 		Connection conn = cp.getConnection();
@@ -57,16 +45,6 @@ public class UserService {
 			return dao.insertUser(conn, user);
 		} catch (SQLException e) {
 			System.out.println("중복된 아이디입니다.!!!");
-			e.printStackTrace();
-		}
-		return 0;
-	}
-	// 회원정보 수정	
-	public int updateUser(UserVO user) {
-		Connection conn = cp.getConnection();
-		try {
-			return dao.updateUser(conn, user);
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.future.my.board.dao.IBoardDAO">
+<insert id="writeBoard" parameterType="BoardVO">
+	INSERT INTO board(
+	                   board_no
+	                 , board_title
+	                 , board_content
+	                 , mem_id
+	                 ) 
+			VALUES (
+			          (SELECT NVL(MAX(board_no),0) +1
+			           FROM board) 
+			         , #{boardTitle}
+			         , #{boardContent}
+			         , #{memId}
+			         )
+</insert>
+<select id="getBoardList" resultType="BoardVO">
+	SELECT a.board_no
+	     , a.board_title
+	     , a.board_content
+	     , b.mem_id
+	     , b.mem_nm
+	     , a.create_date
+	     , a.update_date
+	FROM board a
+	    ,member b
+	WHERE a.mem_id = b.mem_id 
+	ORDER BY a.update_date DESC
+</select>
+</mapper>

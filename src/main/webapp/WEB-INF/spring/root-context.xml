@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	<!-- Oracle DB에 접속할 수 있는 URL과 계정 정보들을 알려준다. -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	  <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+	  <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+	  <property name="username" value="jdbc"></property>
+	  <property name="password" value="jdbc"></property>
+	</bean>
+	
+	<!-- Mybatis 관련 설정파일 및 Dao 객체와 매핑되는 쿼리문(.xml)들의 경로를 알려준다. -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource"></property>
+	    <property name="mapperLocations" value="/WEB-INF/classes/mybatis/mapper/*.xml" /> 
+	    <property name="configLocation" value="/WEB-INF/classes/mybatis/mybatis-config.xml"  />
+	</bean>
+	
+	<!-- @Mapper 어노테이션이 붙은 Dao 객체를 스캔할 수 있도록 함 -->
+	<mybatis-spring:scan base-package="com.future.my" annotation="org.apache.ibatis.annotations.Mapper"/>
+	
+</beans>

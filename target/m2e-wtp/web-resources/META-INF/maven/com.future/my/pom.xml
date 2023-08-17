@@ -149,6 +149,20 @@
             <artifactId>orai18n</artifactId>
             <version>19.3.0.0</version>
         </dependency>
+        
+        <!-- JSON parsing -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <!-- JSON jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.6</version>
+        </dependency>
+        
              
 	</dependencies>
     <build>

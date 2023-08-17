@@ -27,6 +27,60 @@
 	FROM board a
 	    ,member b
 	WHERE a.mem_id = b.mem_id 
+	AND   a.del_yn ='N'
 	ORDER BY a.update_date DESC
 </select>
+<select id="getBoard" resultType="BoardVO" parameterType="int">
+	SELECT a.board_no
+	     , a.board_title
+	     , a.board_content
+	     , b.mem_id
+	     , b.mem_nm
+	     , a.create_date
+	     , a.update_date
+	FROM board a
+	    ,member b
+	WHERE a.mem_id = b.mem_id 
+	AND   a.board_no = #{boardNo}
+</select>
+<update id="updateBoard" parameterType="BoardVO">
+	UPDATE board
+	SET board_title = #{boardTitle}
+	   ,board_content = #{boardContent}
+	   ,update_date   = SYSDATE
+	WHERE board_no = #{boardNo}   
+</update>
+<update id="deleteBoard" parameterType="int">
+	UPDATE board
+	SET    del_yn = 'Y'
+	WHERE board_no = #{boardNo}
+</update>
+<select id="searchBoardList" resultType="BoardVO" parameterType="com.future.my.commons.SearchVO">
+	SELECT a.board_no
+	     , a.board_title
+	     , a.board_content
+	     , b.mem_id
+	     , b.mem_nm
+	     , a.create_date
+	     , a.update_date
+	FROM board a
+	    ,member b
+	WHERE a.mem_id = b.mem_id 
+	AND   a.del_yn ='N'
+	<choose>
+	    <when test='searchOption=="title"'>
+	        AND a.board_title LIKE '%' || #{keyword} || '%'
+	    </when>
+	    <when test='searchOption=="content"'>
+	    	AND a.board_content LIKE '%' || #{keyword} || '%'
+	    </when>
+	    <when test='searchOption=="name"'>
+	    	AND b.mem_nm LIKE '%' || #{keyword} || '%'
+	    </when>
+	</choose>
+	ORDER BY a.update_date DESC
+
+</select>
+
+
 </mapper>

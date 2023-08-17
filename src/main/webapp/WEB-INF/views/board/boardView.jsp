@@ -12,13 +12,14 @@
 	<section class="page-section" id="contact">
 		<div class="container" style="margin-top: 100px;">
 			<div class="d-flex justify-content-end" style="height: 40px">
-				<form class="d-flex">
+				<form class="d-flex" action="<c:url value="/searchBoard" />" method="post">
 					<select class="form-select me-1" name="searchOption"
 						aria-label="Default select example" style="width: 100px">
 						<option value="title" selected>제목</option>
 						<option value="content">내용</option>
 						<option value="name">작성자</option>
-					</select> <input class="form-control me-1" type="text" value=""
+					</select> 
+					<input class="form-control me-1" type="text" value="" name="keyword"
 						style="width: 200px">
 					<button class="btn btn-primary" type="submit">
 						 <svg xmlns="http://www.w3.org/2000/svg&quot; width=16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -33,7 +34,8 @@
 						<th>번호</th>
 						<th>제목</th>
 						<th>작성자</th>
-						<th>날짜</th>
+						<th>최조작성일</th>
+						<th>마지막수정일</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -41,8 +43,12 @@
 					<c:forEach items="${boardList }" var="board">
 						<tr>
 							<td>${board.boardNo}</td>
-							<td>${board.boardTitle}</td>
+							<td>
+							<a href="<c:url value="/boardDetailView?boardNo=${board.boardNo }"/> ">
+								      ${board.boardTitle}</a>
+						    </td>
 							<td>${board.memNm }</td>
+							<td>${board.createDate}</td>
 							<td>${board.updateDate}</td>
 						</tr>
 					</c:forEach>

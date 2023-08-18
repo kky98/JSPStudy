@@ -52,13 +52,83 @@
 							</form>
 	                	</div>
 	                </c:if>
-                </div>          
+                </div>  
+                <form id="replyForm" action="<c:url value="/writeRepleDo" />" method="post">
+                	<div class="row justify-content-center">
+                		<div class="row col-lg-8 col-xl-7">
+                			<div class="col-lg-9">
+                				<input class="form-control" type="text" id="replyInput" name="replyContent">
+                				<input type="hidden" name="memId" value="${sessionScope.login.memId }">
+                			</div>
+                			<div class="col-lg-3">
+                			    <button type="button" class="btn btn-info me-2"
+                			     onclick="fn_reply('${sessionScope.login.memId}')" >등록 </button>
+                			</div>
+                		</div>
+                	</div>
+                </form>     
+                 <div class="row justify-content-center">
+                 	<div class="col-lg-8 col-xl-7">
+                 		<table class="table">
+							<tbody id="replyBody">
+							  <c:forEach items="${replyList }" var="reply">
+							  	<tr>
+							  		<td>${reply.replyContent }</td>
+							  		<td>${reply.memNm }</td>
+							  		<td>${reply.replyDate }</td>
+							  		<td><a>X</a></td>
+							  	</tr>
+							  </c:forEach>
+							</tbody>
+                 		</table>
+                 	</div>
+                 </div>
             </div>
         </section>
 
         <!-- 모든 페이지 하단에 들어가는 부분 -->
         <!-- Footer-->
 		<%@include file="/WEB-INF/inc/footer.jsp"%>
+		<script type="text/javascript">
+				function fn_reply(p_id){
+					if(p_id == ''){
+						alert("댓글은 로그인 이후 !!!");
+						location.href= '<c:url value="/loginView" />';
+					}
+					let msg = $('#replyInput').val();
+					if(msg == ''){
+						alert("내용을 작성해주세요!!!");
+						return;
+					}
+					let json_data = {
+						 	 replyContent : msg
+							,memId : '${sessionScope.login.memId}'
+							,boardNo: '${board.boardNo}'
+					};
+					$.ajax({
+						 url :'<c:url value="/writeReplyDo" />'
+						,type :'POST'
+						,contentType : 'application/json'
+						,dataType : 'json'
+						,data : JSON.stringify(json_data)
+						,success:function(res){
+							
+							let str = "";
+							str +="<tr>";
+							str +="<td>" +res.replyContent+ "</td>";
+							str +="<td>" +res.memNm+ "</td>";
+							str +="<td>" +res.replyDate+ "</td>";
+							str +="<td><a>X</a></td>";
+							str +="</tr>";
+							$("#replyBody").prepend(str);
+							
+							
+						},error :function(e){
+							console.log(e);
+						}
+					});
+				}
+		</script>
     </body>
 </html>
 

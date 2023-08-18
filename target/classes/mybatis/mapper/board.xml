@@ -82,5 +82,45 @@
 
 </select>
 
+<insert id="writeReply" parameterType="com.future.my.board.vo.ReplyVO">
+	INSERT INTO replys (
+	                     reply_no
+	                   , board_no
+	                   , mem_id
+	                   , reply_content
+	                   )
+	 			VALUES(
+	 			         #{replyNo}
+	 			       , #{boardNo}
+	 			       , #{memId}
+	 			       , #{replyContent}
+	 			       )
+</insert>
+<select id="getReply" parameterType="String" resultType="com.future.my.board.vo.ReplyVO">
+	
+		SELECT a.reply_no
+		     , a.mem_id
+		     , b.mem_nm
+		     , a.reply_content
+		     , TO_CHAR(a.reply_date, 'MM/DD HH24:MI') as reply_date
+		FROM replys a, member b
+		WHERE a.mem_id = b.mem_id
+		AND   a.reply_no = #{replyNo}
+
+</select>
+<select id="getReplyList" parameterType="int" resultType="com.future.my.board.vo.ReplyVO">
+	SELECT a.reply_no
+	     , a.mem_id
+	     , b.mem_nm
+	     , a.reply_content
+	     , TO_CHAR(a.reply_date, 'MM/dd HH24:MI') AS reply_date
+	FROM replys a, member b
+	WHERE a.mem_id = b.mem_id
+	AND   a.board_no = #{boardNo}
+	AND   a.del_yn = 'N'
+	ORDER BY reply_date DESC
+
+</select>
+
 
 </mapper>

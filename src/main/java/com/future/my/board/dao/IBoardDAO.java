@@ -20,4 +20,6 @@ public interface IBoardDAO {
 	public ReplyVO getReply(String replyNo);
 	public int writeReply(ReplyVO reply);
 	public List<ReplyVO> getReplyList(int boardNo);
+	
+	public int delReply(String replyNo);
 }

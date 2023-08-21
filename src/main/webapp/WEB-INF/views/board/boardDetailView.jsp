@@ -72,11 +72,13 @@
                  		<table class="table">
 							<tbody id="replyBody">
 							  <c:forEach items="${replyList }" var="reply">
-							  	<tr>
+							  	<tr id="${reply.replyNo }">
 							  		<td>${reply.replyContent }</td>
 							  		<td>${reply.memNm }</td>
 							  		<td>${reply.replyDate }</td>
-							  		<td><a>X</a></td>
+							  		<c:if test="${sessionScope.login.memId == reply.memId }">
+							  			<td><a onclick="fn_del('${reply.replyNo}')">X</a></td>
+							  		</c:if>
 							  	</tr>
 							  </c:forEach>
 							</tbody>
@@ -114,11 +116,11 @@
 						,success:function(res){
 							
 							let str = "";
-							str +="<tr>";
+							str +="<tr id='"+res.replyNo+"'>";
 							str +="<td>" +res.replyContent+ "</td>";
 							str +="<td>" +res.memNm+ "</td>";
 							str +="<td>" +res.replyDate+ "</td>";
-							str +="<td><a>X</a></td>";
+							str +="<td><a onclick='fn_del(\"" +res.replyNo+ "\")' >X</a></td>";
 							str +="</tr>";
 							$("#replyBody").prepend(str);
 							
@@ -128,6 +130,26 @@
 						}
 					});
 				}
+				function fn_del(p_no){
+					if(confirm("정말로 삭제 하시겠습니까?")){
+						$.ajax({
+							 url : '<c:url value="/delReplyDo" />'
+							,type:'POST'
+							,data: JSON.stringify({"replyNo":p_no})
+							,contentType : 'application/json'
+							,dataType:'text'
+							,success:function(res){
+								if(res =='success'){
+									$("#"+p_no).remove();
+								}
+							},error:function(e){
+								console.log(e)
+							}
+						});
+					}
+				}
+				
+				
 		</script>
     </body>
 </html>

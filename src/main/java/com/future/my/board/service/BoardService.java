@@ -72,5 +72,12 @@ public class BoardService {
 		return result;
 	}
 	
+	public void delReply(String replyNo) throws Exception {
+		int result = dao.delReply(replyNo);
+		if(result ==0) {
+			throw new Exception();
+		}
+	}
+	
 	
 }

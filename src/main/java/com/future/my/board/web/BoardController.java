@@ -115,5 +115,14 @@ public class BoardController {
 		return result;
 	}
 	
+	@ResponseBody
+	@PostMapping("/delReplyDo")
+	public String delReplyDo(@RequestBody ReplyVO reply) throws Exception {
+		String result = "fail";
+		boardService.delReply(reply.getReplyNo());
+		result ="success";
+		return result;
+	}
+	
 	
 }

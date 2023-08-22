@@ -23,5 +23,16 @@
 	
 	<!-- @Mapper 어노테이션이 붙은 Dao 객체를 스캔할 수 있도록 함 -->
 	<mybatis-spring:scan base-package="com.future.my" annotation="org.apache.ibatis.annotations.Mapper"/>
+
+	<!--파일 업로드를 위한 mutipartResolver 구현체 등록 -->
+	<bean id="multipartResolver"
+	      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	      <property name="maxUploadSize" value="104857600" />
+	      <property name="maxUploadSizePerFile" value="104857600" />
+	      <property name="maxInMemorySize" value="104857600" />
+	</bean>
+
+
+
 	
 </beans>

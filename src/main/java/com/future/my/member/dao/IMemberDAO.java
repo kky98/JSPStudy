@@ -8,4 +8,6 @@ import com.future.my.member.vo.MemberVO;
 public interface IMemberDAO {
 	public int registMember(MemberVO member);
 	public MemberVO loginMember(MemberVO member);
+	
+	public int profileUpload(MemberVO member);
 }

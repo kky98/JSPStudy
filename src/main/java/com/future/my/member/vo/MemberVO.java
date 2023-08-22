@@ -5,6 +5,8 @@ public class MemberVO {
 	private String memId;
 	private String memPw;
 	private String memNm;
+	private String profileImg;
+	private String addr;
 
 	public MemberVO(String memId, String memPw, String memNm) {
 		this.memId = memId;
@@ -34,6 +36,18 @@ public class MemberVO {
 	}
 	public void setMemNm(String memNm) {
 		this.memNm = memNm;
+	}
+	public String getProfileImg() {
+		return profileImg;
+	}
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
+	public String getAddr() {
+		return addr;
+	}
+	public void setAddr(String addr) {
+		this.addr = addr;
 	}
 	
 	

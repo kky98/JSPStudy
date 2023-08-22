@@ -1,14 +1,22 @@
 package com.future.my.member.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.future.my.member.service.MemberService;
 import com.future.my.member.vo.MemberVO;
@@ -85,6 +93,33 @@ public class MemberController {
 		System.out.println(requestUrl);
 		return "redirect:" + requestUrl;
 	}
+	@RequestMapping("/mypage")
+	public String mypage(HttpSession session, Model model) {
+		if(session.getAttribute("login") == null) {
+			return "redirect:/loginView";
+		}
+		MemberVO login = (MemberVO) session.getAttribute("login");
+		model.addAttribute("member", login);
+		return "member/mypage";
+	}
+	
+	@PostMapping("/files/upload")
+	public ResponseEntity<?> uploadFiles(
+			@RequestParam("uploadImage") MultipartFile uploadImage
+		   ,@RequestParam Map<String, Object> map, HttpSession session) throws Exception{
+		// 웹접근 경로
+		String webPath = "/resources/memberProfile/";
+		// 서버 저장 폴더
+		String folderPath = session.getServletContext().getRealPath(webPath);
+		MemberVO login = (MemberVO) session.getAttribute("login");
+		String imgPath = memberService.uploadProfile(login, folderPath
+				                                        , webPath, uploadImage);
+		Map<String, Object> response = new HashMap<>();
+		response.put("message","success");
+		response.put("imagePath", imgPath);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	
 	
 }

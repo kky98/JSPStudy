@@ -17,8 +17,15 @@
 	  SELECT mem_id
 	        ,mem_pw
 	        ,mem_nm
+	        ,profile_img
+	        ,addr
 	  FROM member
 	  WHERE mem_id =#{memId}
 	  AND   mem_pw =#{memPw} 
 </select>
+<update id="profileUpload" parameterType="MemberVO">
+	 UPDATE member
+	 SET profile_img = #{profileImg}
+	 WHERE mem_id = #{memId}
+</update>
 </mapper>

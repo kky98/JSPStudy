@@ -10,9 +10,24 @@
 		</layout>
 	</appender>
 	
+	<appender name="fileLogger"
+		class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file"
+			value="./log/spring.log"/>  
+		<param name="Append" value="true" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" 
+				value="[%d{yyyy-MM-dd HH:mm:ss}] %-5p: %F:%L - %m%n" /> 
+		</layout>
+	</appender>
+	
 	<!-- Application Loggers -->
-	<logger name="com.future.my">
-		<level value="info" />
+	<logger name="com.future.my" additivity="false">
+<!-- 		<level value="info" /> -->
+		<level value="debug" />
+		<appender-ref ref="console" />
+		<appender-ref ref="fileLogger" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

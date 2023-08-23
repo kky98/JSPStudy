@@ -21,7 +21,7 @@
 	        ,addr
 	  FROM member
 	  WHERE mem_id =#{memId}
-	  AND   mem_pw =#{memPw} 
+<!-- 	  AND   mem_pw =#{memPw}  -->
 </select>
 <update id="profileUpload" parameterType="MemberVO">
 	 UPDATE member

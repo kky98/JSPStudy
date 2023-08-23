@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ public class MemberController {
 	@Autowired 
 	MemberService memberService; 
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@RequestMapping("/registView")
 	public String registView() {
 		return "member/registView";
@@ -34,9 +38,9 @@ public class MemberController {
 	@RequestMapping("/registDo")
 	public String registDo(HttpServletRequest request) {
 		String id = request.getParameter("id");
-		String pw = request.getParameter("pw");
+		String pw = passwordEncoder.encode(request.getParameter("pw"));
 		String nm = request.getParameter("nm");
-		System.out.println(nm);
+		System.out.println(pw);
 		MemberVO member = new MemberVO(id, pw, nm);
 		try {
 			memberService.registMember(member);
@@ -65,7 +69,10 @@ public class MemberController {
 			   ,HttpServletResponse response) {
 		System.out.println(member);
 		MemberVO login = memberService.loginMember(member);
-		if(login == null) {
+		
+		boolean match = passwordEncoder.matches(member.getMemPw(), login.getMemPw());
+		
+		if(login == null || !match) {
 			return "redirect:/loginView?msg=N";
 		}
 		session.setAttribute("login", login);

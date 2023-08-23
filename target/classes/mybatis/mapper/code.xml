@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.future.my.commons.dao.ICodeDAO">
+	<select id="getCodeList" resultType="com.future.my.commons.vo.CodeVO"
+	                         parameterType="String">
+	          SELECT comm_cd
+	                ,comm_nm
+	                ,comm_parent
+	          FROM comm_code
+	          WHERE 1=1
+	          AND
+	          <choose>
+					<when test='commParent==null'>comm_parent is null </when>
+					<when test='commParent!=null'>comm_parent=#{commParent}</when>	          
+	          </choose>
+	</select>
+
+</mapper>

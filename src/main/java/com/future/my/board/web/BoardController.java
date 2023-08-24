@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,22 @@ import com.future.my.board.service.BoardService;
 import com.future.my.board.vo.BoardVO;
 import com.future.my.board.vo.ReplyVO;
 import com.future.my.commons.SearchVO;
+import com.future.my.commons.service.CodeService;
+import com.future.my.commons.vo.CodeVO;
 import com.future.my.member.vo.MemberVO;
 
 @Controller
 public class BoardController {
+	
+	@Autowired 
+	CodeService codeService;
+	
+	@ModelAttribute("comList") // comList 로 board쪽에서는 모두 사용가능
+	public List<CodeVO> getCodeList(){
+		List<CodeVO> comList = codeService.getCodeList(null);
+		return comList;
+	}
+	
 	
 	@Autowired
 	BoardService boardService; 

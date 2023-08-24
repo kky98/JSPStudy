@@ -59,6 +59,56 @@
 			</a>
 		</div>
 	</section>
+	<table>
+		<tr><th>대분류</th>
+			<td>
+				<select id="mainSelect">
+					<option value="" >-- 선택하세요 --</option>
+					<c:forEach items="${comList }" var="code">
+						<option value="${code.commCd }">${code.commNm }</option>
+					</c:forEach>
+				</select>
+			</td>
+			<th>중분류</th>
+			<td>
+				<select id="subSelect">
+					<option value="" >-- 선택하세요 --</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	<script>
+		$(document).ready(function(){
+			$("#mainSelect").on('change', function(){
+				let code = $(this).val();
+				if(code === ""){
+				  $("#subSelect").empty().append("<option value=''>--선택하세요--</option>");
+				  return;
+				}
+				$.ajax({
+					 url : '<c:url value="/api/getSubCodes" />'
+					,type:'get'
+					,data:{commParent : code}
+					,dataType:'json'
+					,success :function(res){
+						$("#subSelect").empty().append("<option value=''>--선택하세요--</option>");
+						$.each(res, function(idx, item){
+							$("#subSelect").append('<option value="'+item.commCd+'">'
+									  +item.commNm + "</option>");
+						});
+					},error:function(e){
+						console.log(e);
+					}
+				});
+			});
+		});
+	
+	
+	
+	
+	
+	</script>
+	
 	<%@include file="/WEB-INF/inc/footer.jsp"%>
 </body>
 </html>

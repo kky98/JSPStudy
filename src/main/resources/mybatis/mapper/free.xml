@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.future.my.free.dao.IFreeBoardDAO">
+
+	<sql id="prePage" >
+		SELECT * FROM (
+		SELECT a.* , rownum as rnum FROM (
+	</sql>
+	
+	<sql id="postPage">
+			) a )b
+		WHERE rnum between #{firstRow} and #{lastRow}
+	</sql>
+	
+	<!--정적메소드 사용 방법.  @클래스이름@메소드이름(파라미터이름) -->
+	<sql id="freeBoardSearch" > 
+		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchWord)">
+			<choose> 
+				<when test='searchType=="T"'>
+					AND bo_title LIKE '%'|| #{searchWord} || '%'
+				</when>
+				<when test='searchType=="W"'>
+					AND bo_writer LIKE '%'|| #{searchWord} || '%'
+				</when>
+				<when test='searchType=="C"'>
+					AND bo_content LIKE '%'|| #{searchWord} || '%'
+				</when>
+			</choose>
+		</if>
+		
+		<if test="!@org.apache.commons.lang3.StringUtils@isBlank(searchCategory)">
+			AND bo_category=#{searchCategory}
+		</if>
+	</sql>
+	
+	<select id="getTotalRowCount"
+		parameterType="FreeBoardVO" resultType="int">
+		SELECT count(*)
+		FROM free_board
+		WHERE 1=1
+		<include refid="freeBoardSearch" ></include>
+		
+	</select>
+	
+	<select id="getBoardList"
+		parameterType="FreeBoardSearchVO"
+		resultType="FreeBoardVO">
+		<include refid="prePage"></include>
+		SELECT  to_char(bo_reg_date,'YYYY-MM-DD') AS bo_reg_date
+		      , to_char(bo_mod_date,'YYYY-MM-DD') AS bo_mod_date
+		      , bo_no 
+		      , bo_title 
+		      , bo_category
+			  , bo_writer 
+			  , bo_pass 
+			  , bo_content
+		      , bo_ip 
+		      , bo_hit 
+		      , bo_del_yn
+		      , b.comm_nm AS bo_category_nm
+		FROM free_board a
+		   , comm_code b
+		WHERE a.bo_category=b.comm_cd
+		<include refid="freeBoardSearch" ></include>
+		ORDER by bo_no desc
+		<include refid="postPage"></include>
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

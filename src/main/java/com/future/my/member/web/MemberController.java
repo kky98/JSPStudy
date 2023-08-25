@@ -51,7 +51,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	@RequestMapping("/loginView")
-	public String loginView(HttpServletRequest request,Model model ) {
+	public String loginView(HttpServletRequest request,Model model, String msg ) {
 		
 		// 현재 request 객체의 요청이 어느 URL로 부터 왔는지		
 		String requestUrl = request.getHeader("Referer");
@@ -59,6 +59,7 @@ public class MemberController {
 		// model에 addAttribute 로 key-value 쌍의 형태로 데이터를 저장하면 
 		// view에서 해당 key로 사용가능함. 
 		model.addAttribute("fromUrl", requestUrl);
+		model.addAttribute("msg",msg);
 		
 		return "member/loginView";
 	}

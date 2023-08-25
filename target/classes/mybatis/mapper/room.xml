@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.future.my.chat.dao.IRoomDAO">
+	<select id="getRoomList" resultType="com.future.my.chat.vo.RoomVO">
+		SELECT a.room_no
+		     , a.room_name
+		     , a.mem_id
+		     , b.mem_nm
+		     , a.reg_date
+		     , a.del_yn
+		FROM rooms a , member b
+		WHERE a.mem_id = b.mem_id
+		AND   a.del_yn = 'N'
+		ORDER BY 1 DESC
+	</select>
+	<select id="getRoom" resultType="com.future.my.chat.vo.RoomVO" parameterType="int">
+		SELECT a.room_no
+		     , a.room_name
+		     , a.mem_id
+		     , b.mem_nm
+		     , a.reg_date
+		     , a.del_yn
+		FROM rooms a , member b
+		WHERE a.mem_id = b.mem_id
+		AND   a.del_yn = 'N'
+		AND   a.room_no = #{roomNo}
+	</select>
+	<insert id="createRoom" parameterType="com.future.my.chat.vo.RoomVO">
+		INSERT INTO rooms (room_no, room_name, mem_id, reg_date, del_yn)
+		VALUES (room_seq.NEXTVAL, #{roomName}, #{memId}, SYSDATE, 'N')
+	</insert>
+</mapper>

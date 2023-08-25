@@ -44,6 +44,8 @@
 						href="${pageContext.request.contextPath}/registView">회원가입</a></li>
 				</c:if>
 				<c:if test="${sessionScope.login != null}">
+									<li class="nav-item mx-0 mx-lg-1"><a
+					class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/chatListView"> 채팅방</a></li>
 					<li class="nav-item mx-0 mx-lg-1"><a
 					class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/mypage"> ${sessionScope.login.memId}님 </a></li>
 					<li class="nav-item mx-0 mx-lg-1"><a

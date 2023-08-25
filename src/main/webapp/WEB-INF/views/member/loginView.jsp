@@ -7,6 +7,12 @@
 <meta charset="UTF-8">
 <title>login</title>
 </head>
+<script>
+	let msg = "${msg}";
+	if(msg =='N'){
+		alert("아이디/비번을 확인해 주세요");
+	}
+</script>
 <body>
 		<%@include file="/WEB-INF/inc/top.jsp" %>
 		<!-- Contact Section-->

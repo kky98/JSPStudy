@@ -119,6 +119,50 @@
 		<script src="${pageContext.request.contextPath }/js/sockjs.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>	
 		<script>
+		  $(document).ready(function(){
+			var client;
+			//채팅방 스크롤 내리기
+			$('.chatcontent').scrollTop($('.chatcontent')[0].scrollHeight);
+			//	socket관련
+			var chatBox =$(".box");
+			var messageInput =$("#msgi");
+// 			var roomNo = "${room.roomNo}";
+			var roomNo = 1;
+			var member = $(".content").data("member");
+// 			소켓통신 객체 생성
+		    var sock = new SockJS("${pageContext.request.contextPath}/endpoint");
+		    client = Stomp.over(sock);
+		    //메세지 전송
+		    function sendmsg(){
+		    	var message = messageInput.val();
+		    	if(message == ""){
+		    		return false;
+		    	}
+// 		    	메세지 전달
+				client.send('/app/hello/' + roomNo,{}, 
+						JSON.stringify({
+							 chatMsg : message
+							,memId :"${sessionScope.login.memId}"
+							,memNm :"${sessionScope.login.memNm}"
+							,roomNo : roomNo
+						}));
+				messageInput.val('');
+		    }
+		    //최초 연결이 맺어지면 실행
+		    client.connect({}, function(){
+		    	//상대방이 보낸 메세지를 전달 받을시 실행
+		    	client.subscribe("/subscribe/chat/"+ roomNo, function(chat){
+		    		console.log(chat);
+		    	});
+		    });
+		    // 메세지 전송 버튼 클릭시
+		    $("#btnSend").click(function(){
+		    	sendmsg();
+		    });
+			  
+		  });
+			
+		
 		</script>
 		
     </body>

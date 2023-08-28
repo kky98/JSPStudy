@@ -27,14 +27,17 @@
                 	</thead>
                 	<tbody>
                 		<!-- 데이터의 수만큼 반복되는 부분 -->
-
+						<c:forEach items="${roomList }" var="room">
 							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td>${room.roomNo }</td>
+								<td>
+								   <a href="<c:url value='/chatView?roomNo=${room.roomNo}' />" >
+								   ${room.roomName }</a>
+								 </td>
+								<td>${room.memNm }</td>
+								<td>${room.regDate}</td>
 							</tr>    
-
+						</c:forEach>
                 	</tbody>
                 </table>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -55,18 +58,20 @@
 		        <h1 class="modal-title fs-5" id="exampleModalLabel">채팅방 이름을 작성해 주세요 ^^ </h1>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		      </div>
-
-			      <div class="modal-body">
-	                     <!-- title input-->
-	                     <div class="mb-3">
-	                         <label for="title">방 제목</label>
-	                         <input class="form-control" id="title" name="roomName" type="text" />
-	                     </div>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-			        <button type="submit" class="btn btn-primary">방 생성</button>
-			      </div>
+				  <form action="<c:url value='/roomCreateDo' />" method="post"> 
+				      <div class="modal-body">
+		                     <!-- title input-->
+		                     <div class="mb-3">
+		                         <label for="title">방 제목</label>
+		                         <input class="form-control" id="title" name="roomName" type="text" />
+		                     </div>
+		                     <input type="hidden" value="${sessionScope.login.memId }" name="memId">
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+				        <button type="submit" class="btn btn-primary">방 생성</button>
+				      </div>
+			      </form>
 		    </div>
 		  </div>
 		</div>

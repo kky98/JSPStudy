@@ -194,14 +194,27 @@
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>5.3.13.RELEASE</version>
 		</dependency>
-        
-        
+       
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 query null체크 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.11</version>
 		</dependency>
+		<!-- socket -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		
+		
+		
              
 	</dependencies>
     <build>

@@ -22,4 +22,11 @@ public class RoomController {
 		model.addAttribute("roomList", roomList);
 		return "chat/chatListView";
 	}
+	
+	@RequestMapping("/roomCreateDo")
+	public String roomCreateDo(RoomVO roomVO) {
+		roomService.createRoom(roomVO);
+		return "redirect:/chatListView";
+	}
+	
 }

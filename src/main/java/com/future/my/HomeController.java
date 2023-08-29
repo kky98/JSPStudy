@@ -4,12 +4,16 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.future.my.member.vo.MemberVO;
 
 /**
  * Handles requests for the application home page.
@@ -36,4 +40,13 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping("/admin")
+	public String admin(HttpSession session) {
+		MemberVO login = (MemberVO) session.getAttribute("login");
+		if(login == null || !login.getMemId().equals("admin")) {
+			return "home";
+		}else {
+			return "admin";
+		}
+	}
 }

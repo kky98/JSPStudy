@@ -73,32 +73,32 @@
                 <div id="chat-containerK">
 					<div class="chatWrap">
 						<div class="main_tit">
-							<h1>방 정보: </h1>
+							<h1>방 정보: [${room.roomNo} 번방 ${room.roomName}] </h1>
 						</div>
 						<div class="content chatcontent border border-secondary" data-room-no="${room.roomNo}" >
 							<div id="list-guestbook" class="">
-
+							     <c:forEach items="${chatList }" var="chat">
 									<!-- 내 채팅일 경우 -->
-
-										<li data-no="" class="me pr-2">
-											<strong class="">내이름 이름</strong>
+									<c:if test="${sessionScope.login.memId eq chat.memId }">
+										<li data-no="${chat.chatNo}" class="me pr-2">
+											<strong class="">${chat.memNm }</strong>
 											<div class="me">
-												<p class='myChat chat-box text-left p-3'>메세지</p>
-     											<strong style="display : inline;" class="align-self-end">작성시간</strong>
+												<p class='myChat chat-box text-left p-3'>${chat.chatMsg }</p>
+     											<strong style="display : inline;" class="align-self-end">${chat.sendDate }</strong>
 											</div>
 										</li>
-
+									</c:if>
 									<!-- 다른사람의 채팅일 경우 -->
-
-										<li data-no="" class="pl-2">
-											<strong>다른사람 이름</strong>
+									<c:if test="${sessionScope.login.memId ne chat.memId }">
+										<li data-no="${chat.chatNo}" class="pl-2">
+											<strong>${chat.memNm }</strong>
 											<div>
-												<p class='chat-box bg-light p-3'>메세지2</p>
-												<strong style="display : inline;" class="align-self-center">작성시간2</strong>
+												<p class='chat-box bg-light p-3'>${chat.chatMsg }</p>
+												<strong style="display : inline;" class="align-self-center">${chat.sendDate }</strong>
 											</div>
 										</li>
-
-
+									</c:if>
+								</c:forEach>
 							</div>
 						</div>
 						<div>
@@ -126,8 +126,7 @@
 			//	socket관련
 			var chatBox =$(".box");
 			var messageInput =$("#msgi");
-// 			var roomNo = "${room.roomNo}";
-			var roomNo = 1;
+			var roomNo = "${room.roomNo}";
 			var member = $(".content").data("member");
 // 			소켓통신 객체 생성
 		    var sock = new SockJS("${pageContext.request.contextPath}/endpoint");
@@ -139,7 +138,7 @@
 		    		return false;
 		    	}
 // 		    	메세지 전달
-				client.send('/app/hello/' + roomNo,{}, 
+				client.send('/app/hello/'+roomNo,{}, 
 						JSON.stringify({
 							 chatMsg : message
 							,memId :"${sessionScope.login.memId}"
@@ -148,18 +147,81 @@
 						}));
 				messageInput.val('');
 		    }
+		    function renderList(vo){
+		    	var date = vo.sendDate;
+		    	var html = "";
+		    	var content = "";
+		    	//내가 보낸 채팅일 경우
+		    	if(vo.memId == "${sessionScope.login.memId}"){
+		    		content = "<p class='myChat chat-box text-left p-3'>"
+		    		         + vo.chatMsg + "</p>";
+		    		html = "<li class='me pr-2'>"
+		    		      +"<strong>" + vo.memNm + "</strong>"
+		    		      +"<div class='me'>" + content + "</div>"
+		    		      +"<strong style='display:inline;' class='align-self-end'>"
+		    		      +date+"</strong>"
+		    		      +"</li>";
+		    	//다른 사람이 보낸경우 
+		    	}else{
+		    		content = "<p class='chat-box bg-light p-3'>"
+	    		         + vo.chatMsg + "</p>";
+		    		html = "<li class='pl-2'>"
+		    		      +"<strong>" + vo.memNm + "</strong>"
+		    		      +"<div>" + content + "</div>"
+		    		      +"<strong style='display:inline;' class='align-self-center'>"
+		    		      +date+"</strong>"
+		    		      +"</li>";
+		    	}
+		    	console.log(html);
+		    	return html;
+		    }
+		    function disconnect(){
+		    	if(client != null){
+					//종료전 직전 메세지를 방 참여자들에게 전달 
+					client.send("/subscribe/chat/"+ roomNo, {},
+							JSON.stringify({
+							  	  type:"notification"
+						    	, message:"${sessionScope.login.memId} 님이 나가셨습니다." 
+							}));
+		    		client.disconnect();
+		    	}
+		    }
+			// 창을 나갈때 이벤트 리스너		    
+		    window.onbeforeunload = function(){
+		    	disconnect();// 함수호출
+		    }
+			$("#btnOut").click(function(){
+				//나가기버튼 클릭시 
+				disconnect();
+				location.href="${pageContext.request.contextPath}/chatListView";
+			});
+		    
+		    
 		    //최초 연결이 맺어지면 실행
-		    client.connect({}, function(){
+		    client.connect({"userId":"${sessionScope.login.memId}","roomId":roomNo}, function(){
 		    	//상대방이 보낸 메세지를 전달 받을시 실행
 		    	client.subscribe("/subscribe/chat/"+ roomNo, function(chat){
-		    		console.log(chat);
+		    		var body = JSON.parse(chat.body);
+		    		if(body.type === "notification"){
+		    			var html = "<div class='notification'>"+ body.message+"</div>";
+		    			$("#list-guestbook").append(html);	
+		    		}else{
+			    		$("#list-guestbook").append(renderList(body));
+		    		}
+				    //스크롤 내려가게
+		    		$(".chatcontent").scrollTop($(".chatcontent")[0].scrollHeight);
 		    	});
 		    });
 		    // 메세지 전송 버튼 클릭시
 		    $("#btnSend").click(function(){
 		    	sendmsg();
 		    });
-			  
+			$("#msgi").keydown(function(e){
+				 if(e.keyCode ==13){
+					 sendmsg();
+				 }
+			});  
+		    
 		  });
 			
 		

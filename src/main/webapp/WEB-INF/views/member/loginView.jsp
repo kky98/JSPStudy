@@ -10,7 +10,9 @@
 <script>
 	let msg = "${msg}";
 	if(msg =='N'){
-		alert("아이디/비번을 확인해 주세요");
+		alert("아이디를 확인해 주세요");
+	}else if(msg =='M'){
+		alert("비번을 확인해 주세요");
 	}
 </script>
 <body>

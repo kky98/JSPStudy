@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.future.my.chat.dao.IChatLogDAO">
+	<select id="getChatList" resultType="com.future.my.chat.vo.ChatLogVO" parameterType="int">
+			SELECT a.chat_no
+			     , a.mem_id
+			     , b.mem_nm
+			     , a.room_no
+			     , a.chat_msg
+			     , TO_CHAR(a.send_date, 'RR/MM/DD HH24:MI') AS send_date
+			FROM chatlog a, member b
+			WHERE a.mem_id = b.mem_id
+			AND   a.room_no = #{roomNo}
+			ORDER BY 1
+	</select>
+	
+	<insert id="insertChat" parameterType="com.future.my.chat.vo.ChatLogVO">
+	
+		INSERT INTO chatlog (chat_no, mem_id, room_no, chat_msg, send_date)
+		VALUES (chat_seq.NEXTVAL, #{memId}, #{roomNo}, #{chatMsg}, SYSDATE)
+		
+	</insert>
+	
+</mapper>

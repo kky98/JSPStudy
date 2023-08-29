@@ -70,11 +70,13 @@ public class MemberController {
 			   ,HttpServletResponse response) {
 		System.out.println(member);
 		MemberVO login = memberService.loginMember(member);
+		if(login == null) {
+			return "redirect:/loginView?msg=N";
+		}
 		
 		boolean match = passwordEncoder.matches(member.getMemPw(), login.getMemPw());
-		
-		if(login == null || !match) {
-			return "redirect:/loginView?msg=N";
+		if(!match) {
+			return "redirect:/loginView?msg=M";
 		}
 		session.setAttribute("login", login);
 		if(remember) {
